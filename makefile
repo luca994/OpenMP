@@ -5,7 +5,7 @@ LDFLAGS = -lm
 SRCDIR = ./src
 INCDIR = ./include
 BINDIR = /usr/local/bin
-SOURCES = $(SRCDIR)/main.cpp $(SRCDIR)/ball.cpp $(SRCDIR)/field.cpp $(SRCDIR)/match.cpp $(SRCDIR)/player.cpp $(SRCDIR)/position.cpp $(SRCDIR)/referee.cpp $(SRCDIR)/timeinterval.cpp
+SOURCES = $(SRCDIR)/main.cpp $(SRCDIR)/ball.cpp $(SRCDIR)/field.cpp $(SRCDIR)/match.cpp $(SRCDIR)/player.cpp $(SRCDIR)/position.cpp $(SRCDIR)/referee.cpp $(SRCDIR)/timeinterval.cpp $(SRCDIR)/parser.cpp
 OBJECTS = $(SOURCES:.c=.o)
 
 all:$(NAME)

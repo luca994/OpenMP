@@ -1,4 +1,5 @@
 #include <iostream>
+#include "parser.h"
 
 int main(){
 /*leggi metadata
@@ -10,4 +11,6 @@ loop(ogni T){
   stampa_possesso;
 }
 */
+Parser *p= new Parser();
+p->parse_file("game_splitted");
 }
