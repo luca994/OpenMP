@@ -1,11 +1,11 @@
 NAME = soccer_mpi_project
-CC = g++
-CFLAGS = -O3 -I $(INCDIR)
-LDFLAGS = -lm
+CC = g++-8
+CFLAGS = -O3 -fopenmp -std=c++14 -I $(INCDIR)
+LDFLAGS = -lm 
 SRCDIR = ./src
 INCDIR = ./include
 BINDIR = /usr/local/bin
-SOURCES = $(SRCDIR)/main.cpp $(SRCDIR)/ball.cpp $(SRCDIR)/field.cpp $(SRCDIR)/match.cpp $(SRCDIR)/player.cpp $(SRCDIR)/position.cpp $(SRCDIR)/referee.cpp $(SRCDIR)/timeinterval.cpp
+SOURCES = $(SRCDIR)/main.cpp $(SRCDIR)/sensor.cpp $(SRCDIR)/ball.cpp $(SRCDIR)/field.cpp $(SRCDIR)/match.cpp $(SRCDIR)/player.cpp $(SRCDIR)/position.cpp $(SRCDIR)/referee.cpp $(SRCDIR)/timeinterval.cpp $(SRCDIR)/event.cpp
 OBJECTS = $(SOURCES:.c=.o)
 
 all:$(NAME)

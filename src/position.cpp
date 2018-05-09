@@ -1,35 +1,62 @@
 #include "math.h"
+#include "position.h"
 
-int Position::compute2DDistance(Position p){
-  if(x==NULL || y==NULL || z==NULL || p.getX()==NULL || P.getY()==NULL || p.getZ()==NULL)
-    return NULL;
-  else
-    return sqrt((pow(p.getX()-x),2)+(pow(p.getY()-y),2));
+Position::Position():x(0),y(0),z(0),valid(false){}
+
+Position::Position(double x,double y,double z)
+{
+  this->x=x,
+  this->y=y;
+  this->z=z;
+  valid=true;
 }
 
-int Position::compute3DDistance(Position p){
-  if(x==NULL || y==NULL || z==NULL || p.getX()==NULL || P.getY()==NULL || p.getZ()==NULL)
-    return NULL;
-  else
-    return sqrt((pow(p.getX()-x),2)+(pow(p.getY()-y),2)+(pow(p.getZ()-z),2));
+double Position::compute2DDistance(Position p)
+{
+    return sqrt((pow((p.getX()-x),2)+ pow((p.getY()-y),2)));
 }
 
-int Position::getX(){
+double Position::compute3DDistance(Position p)
+{
+    return sqrt((pow((p.getX()-x),2)+pow((p.getY()-y),2))+pow((p.getZ()-z),2));
+}
+
+bool Position::isValid()
+{
+  return valid;
+}
+
+double Position::getX()
+{
   return x;
 }
-int Position::getY(){
+
+double Position::getY()
+{
   return y;
 }
-int Position::getZ(){
+
+double Position::getZ()
+{
   return z;
 }
 
-void Postion::setX(int x){
+void Position::setValidity(bool v)
+{
+  valid=v;
+}
+
+void Position::setX(double x)
+{
   this->x=x;
 }
-void Postion::setY(int y){
+
+void Position::setY(double y)
+{
   this->y=y;
 }
-void Postion::setZ(int z){
+
+void Position::setZ(double z)
+{
   this->z=z;
 }

@@ -4,10 +4,11 @@
 
 class Field{
 public:
+  Field();
   Field(Position v1, Position v2, Position v3, Position v4);
   bool isOnField(Position pos);
 private:
-  Position vertex1,vertex2,vertex3,vertex4;
+  Position v1,v2,v3,v4;
   bool checkRectangle();
 };
 #endif

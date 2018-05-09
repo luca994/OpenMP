@@ -3,18 +3,22 @@
 
 class Position{
 public:
-  Position(int x, int y, int z);
-  int getX();
-  int getY();
-  int getZ();
-  void setX(int x);
-  void setY(int y);
-  void setZ(int z);
-  int compute2DDistance(Position p);
-  int compute3DDistance(Position p);
+  Position();
+  Position(double x, double y, double z);
+  double getX();
+  double getY();
+  double getZ();
+  void setX(double x);
+  void setY(double y);
+  void setZ(double z);
+  void setValidity(bool v);
+  double compute2DDistance(Position p);
+  double compute3DDistance(Position p);
+  bool isValid();
 private:
-  int x;
-  int y;
-  int z;
+  bool valid;
+  double x;
+  double y;
+  double z;
 };
 #endif
