@@ -7,10 +7,11 @@ class Player: public ObjectWithSensor{
 public:
   Player();
   Player(std::string name,std::string team,bool playing);
-  bool operator < (const Player &other);
   std::string getType() const;
   std::string getName();
   std::string getTeam();
+  void setPlaying(bool playing);
+  bool isPlaying();
 private:
   std::string fullName;
   std::string team;

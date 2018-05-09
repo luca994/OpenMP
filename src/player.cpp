@@ -24,10 +24,12 @@ std::string Player::getTeam()
   return team;
 }
 
-bool Player::operator <(const Player &other)
+bool Player::isPlaying()
 {
-  if(fullName.compare(other.fullName) < 0)
-    return true;
-  else
-    return false;
+  return playing;
+}
+
+void Player::setPlaying(bool Playing)
+{
+  this->playing=Playing;
 }

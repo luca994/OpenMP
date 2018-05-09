@@ -10,10 +10,10 @@ int Parser::parse_file(string file_name){
 	ifstream infile;
 	infile.open(file_name, ios::in);
 	string data;
-	while(end!=0){	
+	while(end!=0){
 		std::getline(infile, data);
 		cout<<data<<endl;
 		cin>>end;
 	}
+	return 0;
 }
-
