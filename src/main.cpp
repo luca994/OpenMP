@@ -24,11 +24,9 @@ int main(){
 	  for(auto &e: match.getPossessionStatistics())
 	  std::cout<<"Ball Possession "<<e.first<<" = "<<e.second*100<<"%"<< std::endl
 	}
-	Parser *p= new Parser();
-	p->parse_file("game_splitted");
 	*/
 	int exit=0;
-	Parser p("game_splitted", 30);
+	Parser p("/home/riccardo/Desktop/middleware_projects/full-game/full-game", 60);
 	while(!exit){
 		p.parse_file();
 		cin>>exit;

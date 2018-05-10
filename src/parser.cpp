@@ -23,8 +23,7 @@ void print_list(vector<Event> events){
 }
 
 vector<Event> Parser::parse_file(){
-	long int count=0;
-	int end=1;
+	long int count=0; //delete
 	vector<Event> events;
 	string dataLine;
 	string sid, ts, posx, posy, posz, vel, acc, velx, vely, velz, accx, accy, accz;
@@ -100,14 +99,9 @@ vector<Event> Parser::parse_file(){
 		unsigned long int timest = strtoul(c, NULL, 10);
 		Event e(stoi(sid, NULL), timest, p);
 		events.push_back(e);
-		//print_list(events);
-		//cout<<"---------------------------------"<<endl;
 		diff = (e.getTimestamp()-ts_old);
-		//cout<<"ts: "<<e.getTimestamp()<<", ts_old: "<<ts_old<<", diff: "<<diff<<endl;
-		count++;
-		//cout<<"diff: "<<diff<<endl;
+		count++; //delete
 	}
-	//print_list(events);
-	cout<<"num di elem: "<<count<<endl;
+	cout<<"num di elem: "<<count<<endl; //delete
 	return events;
 }
