@@ -1,65 +1,44 @@
 #include "parser.h"
 #include <iostream>
-#include <fstream>
-#include <vector>
 #include <cstdlib>
 #include <string>
 #include <cmath>
+#include "position.h"
 
 using namespace std;
 
-#define T 30
+Parser::Parser(std::string file_name, int interval){
+	this->interval=interval;
+	infile.open(file_name, ios::in);
+}
 
-class Position{
-public:
-	Position(){}
-	Position(int posx, int posy, int posz){
-		x=posx;
-		y=posy;
-		z=posz;
-	}
-	int x;
-	int y;
-	int z;
-};
-
-class Event{
-public:
-	Event(int sid,unsigned long int timestamp, Position actualPosition){
-		sensorid=sid;
-		ts=timestamp;
-		p=actualPosition;
-	}
-	Position p;
-	int sensorid;
-	unsigned long int ts;
-};
+Parser::~Parser(){
+	infile.close();
+}
 
 void print_list(vector<Event> events){
 	for(auto &e: events){
-		cout<<e.sensorid<<" "<<e.ts<<" "<<e.p.x<<" "<<e.p.y<<" "<<e.p.z<<endl;
+		cout<<e.getSid()<<" "<<e.getTimestamp()<<" "<<e.getPosition().getX()<<" "<<e.getPosition().getY()<<" "<<e.getPosition().getZ()<<endl;
 	}
 }
 
-void Parser::parse_file(string file_name){
+vector<Event> Parser::parse_file(){
 	long int count=0;
 	int end=1;
 	vector<Event> events;
-	ifstream infile;
-	infile.open(file_name, ios::in);
 	string dataLine;
 	string sid, ts, posx, posy, posz, vel, acc, velx, vely, velz, accx, accy, accz;
 	unsigned long int ts_old=0;
 	unsigned long int diff=0;
 	bool firstTime=true;
-	while(!infile.eof()){
+	while(diff<=interval*pow(10,12) && !infile.eof()){ //loop to parse the T interval of the file
 		int eventField=0;
-		std::getline(infile, dataLine);
+		getline(infile, dataLine);
 		string temp;
-		for(int i=0;dataLine[i]!='\0';i++){
+		for(int i=0;dataLine[i]!='\0';i++){ //loop to parse the line
 			if(dataLine[i]!=',')
 				temp+=dataLine[i];
-			if(dataLine[i]==','){
+			else{
 				switch(eventField){
 					case 0:
 						sid=temp;							
@@ -69,7 +48,6 @@ void Parser::parse_file(string file_name){
 						if(firstTime){
 							const char * tsol = ts.c_str();
 							ts_old = strtoul(tsol, NULL, 10);
-							cout<<"tsold: "<<ts_old<<endl;
 							firstTime=false;					
 						}
 						break;
@@ -116,7 +94,7 @@ void Parser::parse_file(string file_name){
 			}
 		}
 		accz=temp;
-		temp="";		
+		temp="";
 		Position p(stoi(posx,NULL),stoi(posy,NULL),stoi(posz,NULL));
 		const char * c = ts.c_str();
 		unsigned long int timest = strtoul(c, NULL, 10);
@@ -124,10 +102,12 @@ void Parser::parse_file(string file_name){
 		events.push_back(e);
 		//print_list(events);
 		//cout<<"---------------------------------"<<endl;
-		diff = (e.ts-ts_old)*pow(10,12);
+		diff = (e.getTimestamp()-ts_old);
+		//cout<<"ts: "<<e.getTimestamp()<<", ts_old: "<<ts_old<<", diff: "<<diff<<endl;
 		count++;
 		//cout<<"diff: "<<diff<<endl;
 	}
 	//print_list(events);
-	cout<<count<<endl;
+	cout<<"num di elem: "<<count<<endl;
+	return events;
 }

@@ -1,6 +1,8 @@
 #include <iostream>
 #include "parser.h"
 
+using namespace std;
+
 int main(){
 	/*leggi metadata
 	Position vertex1(x,y,z);
@@ -25,6 +27,10 @@ int main(){
 	Parser *p= new Parser();
 	p->parse_file("game_splitted");
 	*/
-	Parser *p= new Parser();
-	p->parse_file("/home/riccardo/Desktop/middleware_projects/full-game/full-game");
+	int exit=0;
+	Parser p("game_splitted", 30);
+	while(!exit){
+		p.parse_file();
+		cin>>exit;
+	}
 }

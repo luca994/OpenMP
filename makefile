@@ -1,5 +1,5 @@
 NAME = soccer_mpi_project
-CC = g++-8
+CC = g++
 CFLAGS = -O3 -fopenmp -std=c++14 -I $(INCDIR)
 LDFLAGS = -lm
 SRCDIR = ./src
