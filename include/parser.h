@@ -5,7 +5,7 @@
 
 class Parser{
 public:
-	int parse_file(std::string file_name);
+	void parse_file(std::string file_name);
 };
 
 #endif
