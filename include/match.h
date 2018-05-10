@@ -12,7 +12,7 @@
 
 class Match{
 public:
-  Match(Field f,unsigned long int startTime,unsigned long int endTime);
+  Match(Field f,unsigned long int startTime,unsigned long int endTime,int minDistFromTheBall);
   Match(Field f);
   void addSensor(Sensor s);
 //  void restartMatch();
@@ -23,6 +23,7 @@ public:
 private:
   Field field;
   int numberOfPlayers;
+  int maximumDistanceFromTheBall;
   unsigned long int startTime;
   unsigned long int endTime;
   unsigned long int currentTime;
@@ -30,7 +31,7 @@ private:
   std::map<std::shared_ptr<Player>,unsigned long int> playerBallPossession;
   std::map<std::string,unsigned long int> teamBallPossession;
 
-  void findPlayerCloserToTheBall(std::map<int,Sensor> & tempSens, Position pos, std::shared_ptr<Player> player,int distance);
+  void findPlayerCloserToTheBall(std::map<int,Sensor> & tempSens, Position pos, std::shared_ptr<Player> player);
   void findAllMostRecentPositions(std::map<int,Sensor> & tempSens,std::vector<Event> & events,int i);
   bool isInPlay(std::vector<TimeInterval> intervals,unsigned long int ts);
 };
