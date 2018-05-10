@@ -2,10 +2,18 @@
 #define PARSER_H
 
 #include <string>
+#include <fstream>
+#include "event.h"
+#include <vector>
 
 class Parser{
 public:
-	int parse_file(std::string file_name);
+	Parser(std::string file_name, int interval);
+	std::vector<Event> parse_file();
+	~Parser();
+private:
+	std::ifstream infile;
+	int interval;
 };
 
 #endif
