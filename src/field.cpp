@@ -1,21 +1,18 @@
 #include "field.h"
-#include <iostream>
+#include <stdexcept>
 
-Field::Field(Position v1, Position v2, Position v3, Position v4){
-    vertex1 = v1;
-    vertex1 = v2;
-    vertex1 = v3;
-    vertex1 = v4;
-    if(!checkRectangle){
-      vertex1 = NULL;
-      vertex1 = NULL;
-      vertex1 = NULL;
-      vertex1 = NULL;
-      std::cout << "Error in Field initialization, maybe the vertices are not corresponding on a rectangle axis-aligned..." << std::endl;
-    }
+Field::Field(){}
+
+Field::Field(Position v1, Position v2, Position v3, Position v4): v1(v1),v2(v2),v3(v3),v4(v4)
+{
+  if(!checkRectangle())
+  {
+      throw std::invalid_argument("Error in Field initialization.");
+  }
 }
 
-bool Field::checkRectangle(){
+bool Field::checkRectangle()
+{
 /* There must not exist two vertex with the same position*/
   if(v1.getX()==v2.getX() && v1.getY()==v2.getY())
     return false;
@@ -79,11 +76,12 @@ bool Field::checkRectangle(){
 
 
 
-bool Field::isOnField(Position p){
-  int minx=fmin(fmin(v1.getX(),v2.getX()),fmin(v3.getX(),v4.getX()));
-  int maxx=fmax(fmax(v1.getX(),v2.getX()),fmax(v3.getX(),v4.getX()));
-  int miny=fmin(fmin(v1.getY(),v2.getY()),fmin(v3.getY(),v4.getY()));
-  int maxy=fmax(fmax(v1.getY(),v2.getY()),fmax(v3.getY(),v4.getY()));
+bool Field::isOnField(Position p)
+{
+  int minx=std::min(std::min(v1.getX(),v2.getX()),std::min(v3.getX(),v4.getX()));
+  int maxx=std::max(std::max(v1.getX(),v2.getX()),std::max(v3.getX(),v4.getX()));
+  int miny=std::min(std::min(v1.getY(),v2.getY()),std::min(v3.getY(),v4.getY()));
+  int maxy=std::max(std::max(v1.getY(),v2.getY()),std::max(v3.getY(),v4.getY()));
   if(p.getX()<=maxx && p.getX()>=minx && p.getY()<=maxy && p.getY()>=miny)
     return true;
   else

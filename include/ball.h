@@ -5,6 +5,6 @@
 
 class Ball: public ObjectWithSensor{
 public:
-  std::string getType();
+  std::string getType() const;
 };
 #endif
