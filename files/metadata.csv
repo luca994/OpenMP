@@ -9,10 +9,10 @@ id;type;name;team
 98;Player;Nick Gertje;Team A
 47;Player;Dennis Dotterweich;Team A
 16;Player;Dennis Dotterweich;Team A
-49;Player;Niklas Waelzlein;Team A
-88;Player;Niklas Waelzlein;Team A
-19;Player;Wili Sommer;Team A
-52;Player;Wili Sommer;Team A
+49;Player;Niklas Welzlein;Team A
+88;Player;Niklas Welzlein;Team A
+19;Player;Willi Sommer;Team A
+52;Player;Willi Sommer;Team A
 53;Player;Philipp Harlass;Team A
 54;Player;Philipp Harlass;Team A
 23;Player;Roman Hartleb;Team A
@@ -29,8 +29,8 @@ id;type;name;team
 64;Player;Kevin Baer;Team B
 65;Player;Luca Ziegler;Team B
 66;Player;Luca Ziegler;Team B
-67;Player;Ben Mueller;Team B
-68;Player;Ben Mueller;Team B
+67;Player;Ben Müller;Team B
+68;Player;Ben Müller;Team B
 69;Player;Vale Reitstetter;Team B
 38;Player;Vale Reitstetter;Team B
 71;Player;Christopher Lee;Team B

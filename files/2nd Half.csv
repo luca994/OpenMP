@@ -74,7 +74,8 @@ event_id;event_name;event_time_real;event_counter;comment
 6014;Game Interruption Begin;00:29:00.351;37;empty
 6015;Game Interruption End;00:29:14.352;37;empty
 6014;Game Interruption Begin;00:29:36.577;38;empty
-;;;;
+6015;Game Interruption End;00:30:0.0;38;empty
+end;;;;
 ;;;;
 ;;;;
 Statistic:;;;;

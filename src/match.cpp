@@ -45,13 +45,13 @@ std::shared_ptr<Player> Match::findPlayerCloserToTheBall(std::map<int,Sensor> & 
 void Match::findAllMostRecentPositions(std::map<int,Sensor> & tempSens,std::vector<Event> & events,int i)
 {
   std::list<int> notfoundidsens;
-  int elemtoremove;
+  int elemtoremove=0;
   for(auto &e:tempSens)
   {
-    if(e.second.getObject()->getType().compare("Player") && !e.second.getPosition().isValid())
+    if(!e.second.getObject()->getType().compare("Player") && !e.second.getPosition().isValid())
       notfoundidsens.push_back(e.first);
   }
-  for(;!notfoundidsens.empty() && i>=0;--i)
+  for(;!notfoundidsens.empty() && i>=0;i--)
   {
     for(auto &e: notfoundidsens)
     {
@@ -61,15 +61,12 @@ void Match::findAllMostRecentPositions(std::map<int,Sensor> & tempSens,std::vect
         elemtoremove=events[i].getSid();
       }
     }
+    if(elemtoremove!=0)
       notfoundidsens.remove(elemtoremove);
   }
   if(!notfoundidsens.empty())
-  {
     for(auto &e: notfoundidsens)
-    {
       tempSens[e]=sensors[e];
-    }
-  }
 }
 
 bool Match::isInPlay(std::vector<TimeInterval> intervals,unsigned long int ts)
@@ -86,6 +83,8 @@ bool Match::isInPlay(std::vector<TimeInterval> intervals,unsigned long int ts)
 
 void Match::simulateMatch(std::vector<Event> events, std::vector<TimeInterval> intervals)
 {
+//  for(auto & e: sensors) //to delete
+//    std::cout<<"id:"<<e.first<<" ("<<e.second.getPosition().getX()<<","<<e.second.getPosition().getY()<<","<<e.second.getPosition().getZ()<<")"<<std::endl;
   if(events.empty() || intervals.empty())
     return;
   Position p;
@@ -98,12 +97,12 @@ void Match::simulateMatch(std::vector<Event> events, std::vector<TimeInterval> i
     e1.second=0;
   for(auto & e1:tempSens)
     e1.second.setPosition(p);
-  #pragma omp parallel shared(sensors,playerBallPossession,teamBallPossession) private(updatedPositions,playerCloserToTheBall,hasToUpdate) firstprivate(tempSens,tempPossession)
-  {
+//  #pragma omp parallel shared(sensors,playerBallPossession,teamBallPossession) private(updatedPositions,playerCloserToTheBall,hasToUpdate) firstprivate(tempSens,tempPossession)
+//  {
     hasToUpdate=false;
     updatedPositions=false;
     playerCloserToTheBall=NULL;
-    #pragma omp for schedule(static)
+//    #pragma omp for schedule(static)
     for(int i=0;i<events.size();i++)
     {
       std::shared_ptr<ObjectWithSensor> tempObj=tempSens[events[i].getSid()].getObject();
@@ -113,11 +112,11 @@ void Match::simulateMatch(std::vector<Event> events, std::vector<TimeInterval> i
       }
       else if(!tempObj->getType().compare("Ball"))
       {
-        if(field.isOnField(events[i].getPosition()) && !this->isInPlay(intervals,events[i].getTimestamp()))
+        if(field.isOnField(events[i].getPosition()) && !isInPlay(intervals,events[i].getTimestamp()))
         {
           if(!updatedPositions)
           {
-            this->findAllMostRecentPositions(tempSens,events,i);
+            findAllMostRecentPositions(tempSens,events,i);
             updatedPositions=true;
           }
           playerCloserToTheBall=findPlayerCloserToTheBall(tempSens,events[i].getPosition());
@@ -125,8 +124,7 @@ void Match::simulateMatch(std::vector<Event> events, std::vector<TimeInterval> i
             continue;
           else
           {
-            //std::cout<<tempSens[events[i].getSid()].getPeriod()<<std::endl;
-            tempPossession[playerCloserToTheBall]+=500000000;
+            tempPossession[playerCloserToTheBall]+=tempSens[events[i].getSid()].getPeriod();
             playerCloserToTheBall=NULL;
           }
         }
@@ -134,18 +132,16 @@ void Match::simulateMatch(std::vector<Event> events, std::vector<TimeInterval> i
       if(i==events.size()-1)
         hasToUpdate=true;
     }
-  #pragma omp critical
-  {
+//  #pragma omp critical
+//  {
     for(auto & e1:playerBallPossession)
     {
-    //  std::cout<<e1.first->getName()<<" "<<tempPossession[e1.first]<<" "<< omp_get_thread_num() <<std::endl;
       e1.second+=tempPossession[e1.first];
       teamBallPossession[e1.first->getTeam()]+=tempPossession[e1.first];
-    }
-  }
+//    }
   /* The barrier is set in the unlikely case in which there are threads executing findAllMostRecentPositions, to avoid
-  overwriting shared map sensors before the other thread have read it*/
-    #pragma omp_barrier
+    overwriting shared map sensors before the other thread have read it*/
+//    #pragma omp_barrier
     if(hasToUpdate)
     {
       for(auto &e:sensors)
@@ -194,6 +190,14 @@ std::map<int,Sensor> Match::getSensors()
 unsigned long int Match::getCurrentTime()
 {
   return currentTime;
+}
+
+std::vector<std::string> Match::getPlayersName()
+{
+  std::vector<std::string> plrs;
+  for(auto &e:playerBallPossession)
+    plrs.push_back(e.first->getName());
+  return plrs;
 }
 
 void Match::addSensor(Sensor s)

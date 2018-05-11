@@ -67,7 +67,7 @@ event_id;event_name;event_time_real;event_counter;comment
 2011;Game Interruption End;00:29:07.679;33;empty
 2010;Game Interruption Begin;00:29:23.469;34;empty
 2011;Game Interruption End;00:29:32.757;34;empty
-
+end;
 
 
 Statistic:;

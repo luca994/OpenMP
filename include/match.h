@@ -21,6 +21,7 @@ public:
   void simulateMatch(std::vector<Event> events, std::vector<TimeInterval> intervals);
   unsigned long int getPlayerBallPossession(std::string playerName);
   unsigned long int getTeamBallPossession(std::string team);
+  std::vector<std::string> getPlayersName();
   std::map<std::string,double> getPossessionStatistics();
 private:
   Field field;

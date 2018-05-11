@@ -1,4 +1,5 @@
 #include "sensor.h"
+#include <iostream>
 
 Sensor::Sensor()
 {
@@ -12,7 +13,7 @@ Sensor::Sensor(int sid,std::shared_ptr<ObjectWithSensor> obj)
   object=obj;
   this->sid=sid;
   obj->addSensor(sid);
-  if(!obj->getType().compare("Ball") && period==0)
+  if(!obj->getType().compare("Ball"))
     period=500000000;
 }
 
