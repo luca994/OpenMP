@@ -15,6 +15,7 @@ public:
   Match(Field f,unsigned long int startTime,unsigned long int endTime,int minDistFromTheBall);
   Match(Field f);
   void addSensor(Sensor s);
+  std::map<int,Sensor> getSensors();
 //  void restartMatch();
   void simulateMatch(std::vector<Event> events, std::vector<TimeInterval> intervals);
   unsigned long int getPlayerBallPossession(std::string playerName);

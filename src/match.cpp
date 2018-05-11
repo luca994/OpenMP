@@ -171,6 +171,11 @@ std::map<std::string,double> Match::getPossessionStatistics()
   return possessionMap;
 }
 
+std::map<int,Sensor> Match::getSensors()
+{
+  return sensors;
+}
+
 void Match::addSensor(Sensor s)
 {
   std::map<std::string,unsigned long int>::iterator it;

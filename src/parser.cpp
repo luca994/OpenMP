@@ -40,48 +40,48 @@ vector<Event> Parser::parse_file(){
 			else{
 				switch(eventField){
 					case 0:
-						sid=temp;							
+						sid=temp;
 						break;
 					case 1:
 						ts=temp;
 						if(firstTime){
 							const char * tsol = ts.c_str();
 							ts_old = strtoul(tsol, NULL, 10);
-							firstTime=false;					
+							firstTime=false;
 						}
 						break;
 					case 2:
-						posx=temp;						
+						posx=temp;
 						break;
 					case 3:
-						posy=temp;						
+						posy=temp;
 						break;
 					case 4:
-						posz=temp;						
+						posz=temp;
 						break;
 					case 5:
-						vel=temp;						
+						vel=temp;
 						break;
 					case 6:
-						acc=temp;						
+						acc=temp;
 						break;
 					case 7:
-						velx=temp;						
+						velx=temp;
 						break;
 					case 8:
-						vely=temp;						
+						vely=temp;
 						break;
 					case 9:
-						velz=temp;						
+						velz=temp;
 						break;
 					case 10:
-						accx=temp;						
+						accx=temp;
 						break;
 					case 11:
-						accy=temp;						
+						accy=temp;
 						break;
 					case 12:
-						accz=temp;						
+						accz=temp;
 						break;
 					default:
 						cout<<"Error"<<endl;

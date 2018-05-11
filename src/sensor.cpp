@@ -10,7 +10,8 @@ Sensor::Sensor()
 Sensor::Sensor(int sid,std::shared_ptr<ObjectWithSensor> obj)
 {
   object=obj;
-  obj->getSid().push_back(sid);
+  this->sid=sid;
+  obj->addSensor(sid);
   if(!obj->getType().compare("Ball") && period==0)
     period=500000000;
 }
@@ -18,7 +19,7 @@ Sensor::Sensor(int sid,std::shared_ptr<ObjectWithSensor> obj)
 Sensor::Sensor(int sid,std::shared_ptr<ObjectWithSensor> obj,unsigned int hertzFrequency)
 {
   object=obj;
-  obj->getSid().push_back(sid);
+  obj->addSensor(sid);
   this->setFrequency(hertzFrequency);
 }
 
