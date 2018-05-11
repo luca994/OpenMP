@@ -1,0 +1,43 @@
+id;type;name;team
+4;Ball;;
+8;Ball;;
+10;Ball;;
+12;Ball;;
+13;Player;Nick Gertje;Team A
+14;Player;Nick Gertje;Team A
+97;Player;Nick Gertje;Team A
+98;Player;Nick Gertje;Team A
+47;Player;Dennis Dotterweich;Team A
+16;Player;Dennis Dotterweich;Team A
+49;Player;Niklas Waelzlein;Team A
+88;Player;Niklas Waelzlein;Team A
+19;Player;Wili Sommer;Team A
+52;Player;Wili Sommer;Team A
+53;Player;Philipp Harlass;Team A
+54;Player;Philipp Harlass;Team A
+23;Player;Roman Hartleb;Team A
+24;Player;Roman Hartleb;Team A
+57;Player;Erik Engelhardt;Team A
+58;Player;Erik Engelhardt;Team A
+59;Player;Sandro Schneider;Team A
+28;Player;Sandro Schneider;Team A
+61;Player;Leon Krapf;Team B
+62;Player;Leon Krapf;Team B
+99;Player;Leon Krapf;Team B
+100;Player;Leon Krapf;Team B
+63;Player;Kevin Baer;Team B
+64;Player;Kevin Baer;Team B
+65;Player;Luca Ziegler;Team B
+66;Player;Luca Ziegler;Team B
+67;Player;Ben Mueller;Team B
+68;Player;Ben Mueller;Team B
+69;Player;Vale Reitstetter;Team B
+38;Player;Vale Reitstetter;Team B
+71;Player;Christopher Lee;Team B
+40;Player;Christopher Lee;Team B
+73;Player;Leon Heinze;Team B
+74;Player;Leon Heinze;Team B
+75;Player;Leo Langhans;Team B
+44;Player;Leo Langhans;Team B
+105;Referee;;
+106;Referee;;
