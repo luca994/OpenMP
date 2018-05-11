@@ -8,8 +8,7 @@
 
 using namespace std;
 
-#define BEGIN "2010"
-#define END "2011"
+int klo;
 
 Parser::Parser(std::string file_name, int interval){
 	this->interval=interval;
@@ -66,6 +65,8 @@ vector<Event> Parser::parse_event_file(){
 		count++; //delete
 	}
 	cout<<"num di elem: "<<count<<endl; //delete
+//	klo+=count;
+//	cout<<"total: "<<klo<<endl;
 	//print_list(events);//delete
 	return events;
 }
@@ -83,13 +84,10 @@ vector<TimeInterval> Parser::parse_interval_file(unsigned long int beginMatch){
 		getline(infile, temp, ';');
 		getline(infile, timeEnd, ';');
 		getline(infile, temp, '\n');
-		cout<<"timeStart: "<<timeStart<<" timeEnd: "<<timeEnd<<endl;
 		TimeInterval tint(convertTime(timeStart)+beginMatch, convertTime(timeEnd)+beginMatch, true);
 		intervalVect.push_back(tint);
 		getline(infile, temp, ';');
-		cout<<"initial temp: "<<temp<<endl;
 	}
-	print_list_pauses(intervalVect);
 	return intervalVect;
 }
 
@@ -101,9 +99,9 @@ unsigned long int Parser::convertTime(string time){
 	result=stoul(temp)*60; //time in minutes
 	getline(iss, temp, ':');
 	result=(result+stoul(temp))*60; //time in seconds
-	getline(iss, temp, ':');
-	result=(result+stoul(temp))*1000; //time in milliseconds
 	getline(iss, temp, '.');
+	result=(result+stoul(temp))*1000; //time in milliseconds
+	getline(iss, temp, ';');
 	result=(result+stoul(temp))*pow(10,9); //time in picoseconds
 	return result;
 }

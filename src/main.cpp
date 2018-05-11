@@ -10,6 +10,7 @@
 #include "ball.h"
 #include "referee.h"
 #include "player.h"
+#include <math.h>
 
 using namespace std;
 
@@ -37,16 +38,20 @@ Field initialize_field(string filename)
 unsigned long int * read_time(string filename)
 {
 	ifstream csv_file(filename);
-	unsigned long int * ts=new unsigned long int[2];
+	unsigned long int * ts=new unsigned long int[4];
 	if(!csv_file.is_open())
 		cout<<"error in opening file "<<filename<<endl;
 	string start,end;
 	getline(csv_file,start,'\n');
 	getline(csv_file,start,';');
 	getline(csv_file,end,'\n');
-	csv_file.close();
 	ts[0]=stoul(start);
 	ts[1]=stoul(end);
+	getline(csv_file,start,';');
+	getline(csv_file,end,'\n');
+	ts[2]=stoul(start);
+	ts[3]=stoul(end);
+	csv_file.close();
 	return ts;
 }
 
@@ -92,13 +97,36 @@ void initialize_match(Match &match,string filename)
 	}
 }
 
-int main()
+int main(int argc,char *argv[])
 {
-	unsigned long int * startend = new unsigned long int[2];
+	int k=1;
+	unsigned long int * startend = new unsigned long int[4];
 	Field field = initialize_field("files/field.csv");
 	startend = read_time("files/time.csv");
-	Match match(field,startend[0],startend[1],1);
+	Match match(field,startend[0],startend[3],k);
 	initialize_match(match,"files/metadata.csv");
+	Parser events_generator("files/full-game",30);
+	Parser intervals_generator("files/1st Half.csv",0);
+	vector<TimeInterval> intervals = intervals_generator.parse_interval_file(startend[0]);
+	intervals_generator.setFile("files/2nd Half.csv");
+	intervals.push_back(TimeInterval(startend[1],startend[2],true));
+	vector<TimeInterval> intervals2 = intervals_generator.parse_interval_file(startend[2]);
+	intervals.insert(intervals.end(),intervals2.begin(),intervals2.end());
+	while(match.getCurrentTime()<=startend[3])
+	{
+		match.simulateMatch(events_generator.parse_event_file(),intervals);
+	//	cout<<match.getCurrentTime()<<endl;
+	//	for(auto &e:match.getPossessionStatistics())
+	//		cout<<"Possession "<<e.first<<" = "<<e.second<<endl;
+	}
+	Parser pPoss("files/Ben Müller.csv", 0);
+	vector<TimeInterval> tposs = pPoss.parse_interval_file(0);
+	unsigned long int totTimePoss=0;
+	for(auto &i: tposs){
+		totTimePoss+=(i.getEnd()-i.getStart());
+	}
+	cout<<"Real Muller time: "<<totTimePoss<<endl;
+	cout<<"Calc Muller time: "<<match.getPlayerBallPossession("Ben Mueller")<<endl;
 	/*
 	loop(ogni T){
 	  read and create vector<Event> events;
@@ -107,13 +135,11 @@ int main()
 	  for(auto &e: match.getPossessionStatistics())
 	  	std::cout<<"Ball Possession "<<e.first<<" = "<<e.second*100<<"%"<< std::endl
 	}
-	*/
-	unsigned long int beginMatch = 10629342490369879;
-	int exit=0;
-	Parser p("/home/riccardo/Desktop/middleware_projects/referee-events/referee-events/Game Interruption/1st Half.csv", 60);
-	while(!exit){
-		p.parse_interval_file(beginMatch);
-		cin>>exit;
-	}
-	
+	unsigned long int beginMatch = startend[0];
+		int exit=0;
+		Parser p("/home/riccardo/Desktop/middleware_projects/referee-events/referee-events/Game Interruption/1st Half.csv", 60);
+		while(!exit){
+			p.parse_interval_file(beginMatch);
+			cin>>exit;
+}	*/
 }

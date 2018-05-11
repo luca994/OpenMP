@@ -14,10 +14,10 @@ public:
 	std::vector<TimeInterval> parse_interval_file(unsigned long int beginMatch);
 	~Parser();
 	void setFile(std::string file_name);
+	unsigned long int convertTime(std::string time);
 private:
 	std::ifstream infile;
 	int interval;
-	unsigned long int convertTime(std::string time);
 };
 
 #endif
