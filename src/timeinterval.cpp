@@ -24,3 +24,11 @@ void TimeInterval::setEnd(unsigned long int e)
 {
   end=e;
 }
+
+unsigned long int TimeInterval::getStart(){
+	return start;
+}
+
+unsigned long int TimeInterval::getEnd(){
+	return end;
+}

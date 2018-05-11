@@ -107,11 +107,13 @@ int main()
 	  for(auto &e: match.getPossessionStatistics())
 	  	std::cout<<"Ball Possession "<<e.first<<" = "<<e.second*100<<"%"<< std::endl
 	}
+	*/
+	unsigned long int beginMatch = 10629342490369879;
 	int exit=0;
-	Parser p("/home/riccardo/Desktop/middleware_projects/full-game/full-game", 60);
+	Parser p("/home/riccardo/Desktop/middleware_projects/referee-events/referee-events/Game Interruption/1st Half.csv", 60);
 	while(!exit){
-		p.parse_file();
+		p.parse_interval_file(beginMatch);
 		cin>>exit;
 	}
-		*/
+	
 }
