@@ -75,7 +75,7 @@ vector<Event> Parser::parse_event_file()
 		diff = (e.getTimestamp()-ts_old);
 		count++; //delete
 	}
-	cout<<"num di elem: "<<count<<endl; //delete
+	cout<<"number of parsed events: "<<count<<endl; //delete
 	return events;
 }
 

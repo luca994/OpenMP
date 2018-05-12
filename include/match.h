@@ -12,7 +12,7 @@
 
 class Match{
 public:
-  Match(Field f,unsigned long int startTime,unsigned long int endTime,int maxDistFromTheBall);
+  Match(Field f,unsigned long int startTime,unsigned long int endTime,double maxDistFromTheBall);
   Match(Field f);
   void addSensor(Sensor s);
   std::map<int,Sensor> getSensors();
@@ -26,7 +26,7 @@ public:
 private:
   Field field;
   int numberOfPlayers;
-  int maximumDistanceFromTheBall;
+  double maximumDistanceFromTheBall;
   unsigned long int startTime;
   unsigned long int endTime;
   unsigned long int currentTime;
