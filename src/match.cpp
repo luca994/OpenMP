@@ -72,7 +72,7 @@ void Match::findAllMostRecentPositions(std::map<int,Sensor> & tempSens,std::vect
       tempSens[e]=sensors[e];
 }
 
-bool Match::isInPlay(std::vector<TimeInterval> intervals,unsigned long int ts)
+bool Match::isInPlay(std::vector<TimeInterval> & intervals,unsigned long int ts)
 {
   if(ts<startTime || ts>endTime)
     return false;
@@ -84,7 +84,7 @@ bool Match::isInPlay(std::vector<TimeInterval> intervals,unsigned long int ts)
   return true;
 }
 
-void Match::simulateMatch(std::vector<Event> events, std::vector<TimeInterval> intervals)
+void Match::simulateMatch(std::vector<Event> & events, std::vector<TimeInterval> & intervals)
 {
   if(events.empty())
     return;
@@ -98,61 +98,54 @@ void Match::simulateMatch(std::vector<Event> events, std::vector<TimeInterval> i
     e1.second=0;
   for(auto & e1:tempSens)
     e1.second.setPosition(p);
-  #pragma omp parallel shared(sensors,playerBallPossession,teamBallPossession) private(p,updatedPositions,playerCloserToTheBall,hasToUpdate) firstprivate(tempSens,tempPossession)
+  #pragma omp parallel default(shared) private(p,updatedPositions,playerCloserToTheBall,hasToUpdate) firstprivate(tempSens,tempPossession)
     {
     p=Position();
     hasToUpdate=false;
     updatedPositions=false;
     playerCloserToTheBall=NULL;
     #pragma omp for schedule(static)
-    for(int i=0;i<events.size();i++)
-    {
-      std::shared_ptr<ObjectWithSensor> tempObj=tempSens[events[i].getSid()].getObject();
-      if(!tempObj->getType().compare("Player"))
+      for(int i=0;i<events.size();i++)
       {
-        tempSens[events[i].getSid()].setPosition(events[i].getPosition());
-      }
-      else if(!tempObj->getType().compare("Ball"))
-      {
-        if(field.isOnField(events[i].getPosition()) && isInPlay(intervals,events[i].getTimestamp()))
+        std::shared_ptr<ObjectWithSensor> tempObj=tempSens[events[i].getSid()].getObject();
+        if(!tempObj->getType().compare("Player"))
+          tempSens[events[i].getSid()].setPosition(events[i].getPosition());
+        else if(!tempObj->getType().compare("Ball"))
         {
-          if(!updatedPositions)
+          if(field.isOnField(events[i].getPosition()) && isInPlay(intervals,events[i].getTimestamp()))
           {
-            findAllMostRecentPositions(tempSens,events,i);
-            updatedPositions=true;
-          }
-          playerCloserToTheBall=findPlayerCloserToTheBall(tempSens,events[i].getPosition());
-          if(playerCloserToTheBall==NULL)
-            continue;
-          else
-          {
-            tempPossession[playerCloserToTheBall]+=tempSens[events[i].getSid()].getPeriod();
-            playerCloserToTheBall=NULL;
+            if(!updatedPositions)
+            {
+              findAllMostRecentPositions(tempSens,events,i);
+              updatedPositions=true;
+            }
+            playerCloserToTheBall=findPlayerCloserToTheBall(tempSens,events[i].getPosition());
+            if(playerCloserToTheBall==NULL)
+              continue;
+            else
+            {
+              tempPossession[playerCloserToTheBall]+=tempSens[events[i].getSid()].getPeriod();
+              playerCloserToTheBall=NULL;
+            }
           }
         }
+        if(i==events.size()-1)
+          hasToUpdate=true;
       }
-      if(i==events.size()-1)
-        hasToUpdate=true;
-    }
-  /* The barrier is set in the unlikely case in which there are threads executing findAllMostRecentPositions, to avoid
-    overwriting shared map sensors before the other thread have read it*/
-    #pragma omp barrier
-    {
-      #pragma omp critical
+        #pragma omp critical
+        {
+          for(auto & e1:playerBallPossession)
+          {
+            e1.second+=tempPossession[e1.first];
+            teamBallPossession[e1.first->getTeam()]+=tempPossession[e1.first];
+          }
+       }
+      if(hasToUpdate)
       {
-      for(auto & e1:playerBallPossession)
-      {
-        e1.second+=tempPossession[e1.first];
-        teamBallPossession[e1.first->getTeam()]+=tempPossession[e1.first];
-      }
+        for(auto &e:sensors)
+          e.second=tempSens[e.first];
       }
     }
-    if(hasToUpdate)
-    {
-      for(auto &e:sensors)
-        e.second=tempSens[e.first];
-    }
-  }
   currentTime=events[events.size()-1].getTimestamp();
 }
 

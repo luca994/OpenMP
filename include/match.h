@@ -18,7 +18,7 @@ public:
   std::map<int,Sensor> getSensors();
 //  void restartMatch();
   unsigned long int getCurrentTime();
-  void simulateMatch(std::vector<Event> events, std::vector<TimeInterval> intervals);
+  void simulateMatch(std::vector<Event> & events, std::vector<TimeInterval> & intervals);
   unsigned long int getPlayerBallPossession(std::string playerName);
   unsigned long int getTeamBallPossession(std::string team);
   std::vector<std::string> getPlayersName();
@@ -36,6 +36,6 @@ private:
 
   std::shared_ptr<Player> findPlayerCloserToTheBall(std::map<int,Sensor> & tempSens, Position pos);
   void findAllMostRecentPositions(std::map<int,Sensor> & tempSens,std::vector<Event> & events,int i);
-  bool isInPlay(std::vector<TimeInterval> intervals,unsigned long int ts);
+  bool isInPlay(std::vector<TimeInterval> & intervals,unsigned long int ts);
 };
 #endif

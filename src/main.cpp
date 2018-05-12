@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <math.h>
+#include <vector>
 #include "position.h"
 #include "field.h"
 #include "parser.h"
@@ -77,11 +78,27 @@ int main(int argc,char *argv[])
 	vector<TimeInterval> intervals2 = initializator.parse_interval_file(startend[2]);
 	intervals.insert(intervals.end(),intervals2.begin(),intervals2.end());
 	initializator.setFile("files/full-game");
+	vector<Event> events;
+	if(argc>=4)
+	{
+			cout<<"[INFO] K="<<k<<" parsing all the events..."<<endl;
+			initializator.setInterval(10000);
+			events = initializator.parse_event_file();
+			int user;
+			cout<<"Parsed file: press 1 to continue ";
+			cin>>user;
+			if(user==1)
+				match.simulateMatch(events,intervals);
+	}
+	else
+	{
 	initializator.setInterval(interval);
 	cout<<"[INFO] K="<<k<<" T="<<interval<<endl;
 	while(match.getCurrentTime()<=startend[3])
 	{
-		match.simulateMatch(initializator.parse_event_file(),intervals);
+		events = initializator.parse_event_file();
+		match.simulateMatch(events,intervals);
+	}
 	}
 	printStats(match);
-}
+	}
