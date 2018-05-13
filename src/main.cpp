@@ -2,6 +2,7 @@
 #include <string>
 #include <math.h>
 #include <vector>
+#include <time.h>
 #include "position.h"
 #include "field.h"
 #include "parser.h"
@@ -79,16 +80,21 @@ int main(int argc,char *argv[])
 	intervals.insert(intervals.end(),intervals2.begin(),intervals2.end());
 	initializator.setFile("files/full-game");
 	vector<Event> events;
+	time_t timer1,timer2;
+	int n;
 	if(argc>=4)
 	{
 			cout<<"[INFO] K="<<k<<" parsing all the events..."<<endl;
 			initializator.setInterval(10000);
 			events = initializator.parse_event_file();
-			int user;
-			cout<<"Parsed file: press 1 to continue ";
-			cin>>user;
-			if(user==1)
-				match.simulateMatch(events,intervals);
+			time(&timer1);
+//			int user;
+//			cout<<"Parsed file: press 1 to continue ";
+//			cin>>user;
+//			if(user==1)
+			n+=match.simulateMatch(events,intervals);
+			time(&timer2);
+			cout<<"Execution time: "<<timer2-timer1<<" s"<<endl;
 	}
 	else
 	{
@@ -97,8 +103,12 @@ int main(int argc,char *argv[])
 	while(match.getCurrentTime()<=startend[3])
 	{
 		events = initializator.parse_event_file();
-		match.simulateMatch(events,intervals);
+		time(&timer1);
+		n+=match.simulateMatch(events,intervals);
+		time(&timer2);
 	}
 	}
 	printStats(match);
+		cout<<"Execution time: "<<timer2-timer1<<" s"<<endl;
+		cout<<"n= "<<n<<" events"<<endl;
 	}

@@ -84,10 +84,11 @@ bool Match::isInPlay(std::vector<TimeInterval> & intervals,unsigned long int ts)
   return true;
 }
 
-void Match::simulateMatch(std::vector<Event> & events, std::vector<TimeInterval> & intervals)
+int Match::simulateMatch(std::vector<Event> & events, std::vector<TimeInterval> & intervals)
 {
   if(events.empty())
-    return;
+    return 0;
+  int n=0;
   Position p;
   std::shared_ptr<Player> playerCloserToTheBall;
   bool updatedPositions;
@@ -98,22 +99,25 @@ void Match::simulateMatch(std::vector<Event> & events, std::vector<TimeInterval>
     e1.second=0;
   for(auto & e1:tempSens)
     e1.second.setPosition(p);
-  #pragma omp parallel default(shared) private(p,updatedPositions,playerCloserToTheBall,hasToUpdate) firstprivate(tempSens,tempPossession)
-    {
+//  #pragma omp parallel default(shared) private(p,updatedPositions,playerCloserToTheBall,hasToUpdate) firstprivate(tempSens,tempPossession)
+//    {
     p=Position();
     hasToUpdate=false;
     updatedPositions=false;
     playerCloserToTheBall=NULL;
-    #pragma omp for schedule(static)
+//    #pragma omp for schedule(static)
       for(int i=0;i<events.size();i++)
       {
         std::shared_ptr<ObjectWithSensor> tempObj=tempSens[events[i].getSid()].getObject();
-        if(!tempObj->getType().compare("Player"))
+        if(!tempObj->getType().compare("Player")){
           tempSens[events[i].getSid()].setPosition(events[i].getPosition());
+          n++;
+        }
         else if(!tempObj->getType().compare("Ball"))
         {
           if(field.isOnField(events[i].getPosition()) && isInPlay(intervals,events[i].getTimestamp()))
           {
+            n++;
             if(!updatedPositions)
             {
               findAllMostRecentPositions(tempSens,events,i);
@@ -132,21 +136,24 @@ void Match::simulateMatch(std::vector<Event> & events, std::vector<TimeInterval>
         if(i==events.size()-1)
           hasToUpdate=true;
       }
-        #pragma omp critical
-        {
           for(auto & e1:playerBallPossession)
           {
+//            #pragma omp atomic
             e1.second+=tempPossession[e1.first];
+//            #pragma omp atomic
             teamBallPossession[e1.first->getTeam()]+=tempPossession[e1.first];
           }
-       }
       if(hasToUpdate)
       {
         for(auto &e:sensors)
-          e.second=tempSens[e.first];
+        {
+          if(tempSens[e.first].getPosition().isValid())
+            e.second=tempSens[e.first];
+        }
       }
-    }
+  //  }
   currentTime=events[events.size()-1].getTimestamp();
+  return n;
 }
 
 unsigned long int Match::getPlayerBallPossession(std::string playerName)
