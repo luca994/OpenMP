@@ -7,12 +7,10 @@
 class ObjectWithSensor{
 public:
   virtual std::string getType() const=0;
-  std::list<int> getSids()
-  {
+  std::list<int> getSids(){
     return sids;
   }
-  void addSensor(int sid)
-  {
+  void addSensor(int sid){
     sids.push_back(sid);
   }
 private:

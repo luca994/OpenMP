@@ -15,13 +15,15 @@ using namespace std;
 Parser::Parser(std::string file_name){
 	infile.open(file_name, ios::in);
 	interval=0;
+	lastEventTs=0;
 	if(!infile.is_open())
 		std::cout<<"failed opening "<<file_name<<std::endl;
 }
 
 Parser::Parser(std::string file_name, int interval){
 	this->interval=interval;
-		infile.open(file_name, ios::in);
+	lastEventTs=0;
+	infile.open(file_name, ios::in);
 }
 
 Parser::~Parser(){
@@ -29,58 +31,38 @@ Parser::~Parser(){
 }
 
 //delete
-void print_list_events(vector<Event> events)
-{
+void print_list_events(vector<Event> events){
 	for(auto &e: events)
 		cout<<e.getSid()<<" "<<e.getTimestamp()<<" "<<e.getPosition().getX()<<" "<<e.getPosition().getY()<<" "<<e.getPosition().getZ()<<endl;
 }
 
-void print_list_pauses(vector<TimeInterval> tints)
-{
+void print_list_pauses(vector<TimeInterval> tints){
 	for(auto &e: tints)
 		cout<<"start: "<<e.getStart()<<" end: "<<e.getEnd()<<endl;
 }
 
-vector<Event> Parser::parse_event_file()
-{
-	long int count=0; //delete
+vector<Event> Parser::parse_event_file(){
 	vector<Event> events;
-	string sid, ts, posx, posy, posz, vel, acc, velx, vely, velz, accx, accy, accz;
-	unsigned long int ts_old=0;
+	string sid, ts, posx, posy, posz, trash;
 	unsigned long int diff=0;
-	bool firstTime=true;
-	while(diff<=interval*pow(10,12) && !infile.eof())
-	{ //loop to parse the T interval of the file
+	while(diff<=interval*pow(10,12) && !infile.eof()){
 		getline(infile, sid, ',');
 		getline(infile, ts, ',');
-		if(firstTime){
-			ts_old = stoul(ts);
-			firstTime=false;
-		}
 		getline(infile, posx, ',');
 		getline(infile, posy, ',');
 		getline(infile, posz, ',');
-		getline(infile, vel, ',');
-		getline(infile, acc, ',');
-		getline(infile, velx, ',');
-		getline(infile, vely, ',');
-		getline(infile, velz, ',');
-		getline(infile, accx, ',');
-		getline(infile, accy, ',');
-		getline(infile, accz, '\n');
+		getline(infile, trash, '\n');
 		Position p(stoi(posx),stoi(posy),stoi(posz));
-		unsigned long int timest = stoul(ts);
-		Event e(stoi(sid, NULL), timest, p);
+		Event e(stoi(sid), stoul(ts), p);
 		events.push_back(e);
-		diff = (e.getTimestamp()-ts_old);
-		count++; //delete
+		diff = (e.getTimestamp()-lastEventTs);
 	}
-	cout<<"number of parsed events: "<<count<<endl; //delete
+	lastEventTs = events[events.size()-1].getTimestamp();
+	cout<<"number of parsed events: "<<events.size()<<endl;
 	return events;
 }
 
-vector<TimeInterval> Parser::parse_interval_file(unsigned long int beginMatch)
-{
+vector<TimeInterval> Parser::parse_interval_file(unsigned long int beginMatch){
 	string timeStart, timeEnd, temp;
 	vector<TimeInterval> intervalVect;
 	getline(infile, temp, '\n');
@@ -100,8 +82,7 @@ vector<TimeInterval> Parser::parse_interval_file(unsigned long int beginMatch)
 	return intervalVect;
 }
 
-unsigned long int Parser::convertTime(string time)
-{
+unsigned long int Parser::convertTime(string time){
 	istringstream iss(time);
 	unsigned long int result=0;
 	string temp;
@@ -116,13 +97,11 @@ unsigned long int Parser::convertTime(string time)
 	return result;
 }
 
-Field Parser::initialize_field()
-{
+Field Parser::initialize_field(){
 	Position *vertex=new Position[4];
 	string x,y,z;
 	getline(infile,x,'\n');
-	for(int i=0;i<4 && !infile.eof();i++)
-	{
+	for(int i=0;i<4 && !infile.eof();i++){
 			getline(infile,x,';');
 			getline(infile,y,';');
 			getline(infile,z,'\n');
@@ -134,15 +113,13 @@ Field Parser::initialize_field()
 }
 
 
-void Parser::initialize_match(Match &match)
-{
+void Parser::initialize_match(Match &match){
 	vector<tuple<string,string,string,string>> elements;
 	string id,type,name,team;
 	for(int i=0;!infile.eof();i++) {
 		if(i==0) //Skip the first line
 			getline(infile,id,'\n');
-		else
-		{
+		else{
 			getline(infile,id,';');
 			getline(infile,type,';');
 			getline(infile,name,';');
@@ -158,13 +135,10 @@ void Parser::initialize_match(Match &match)
 		if(get<1>(e)=="Referee")
 			match.addSensor(Sensor(stoi(get<0>(e)),make_shared<Referee>()));
 	vector<tuple<string,string,string,string>>::iterator it;
-  for(it = elements.begin(); it != elements.end(); ++it)
-	{
-		if(get<1>(*it)=="Player")
-		{
+  for(it = elements.begin(); it != elements.end(); ++it){
+		if(get<1>(*it)=="Player"){
 			shared_ptr<Player> player = make_shared<Player>(get<2>(*it),get<3>(*it),true);
-			while(!get<2>(*it).compare(player->getName()))
-			{
+			while(!get<2>(*it).compare(player->getName())){
 				match.addSensor(Sensor(stoi(get<0>(*it)),player));
 				it++;
 			}
@@ -173,8 +147,7 @@ void Parser::initialize_match(Match &match)
 	}
 }
 
-unsigned long int * Parser::read_time()
-{
+unsigned long int * Parser::read_time(){
 	unsigned long int * ts=new unsigned long int[4];
 	string start,end;
 	getline(infile,start,'\n');
@@ -189,13 +162,11 @@ unsigned long int * Parser::read_time()
 	return ts;
 }
 
-void Parser::setInterval(int interv)
-{
+void Parser::setInterval(int interv){
 	interval=interv;
 }
 
-void Parser::setFile(string file_name)
-{
+void Parser::setFile(string file_name){
 	if(infile.is_open())
 		infile.close();
 	infile.open(file_name, ios::in);

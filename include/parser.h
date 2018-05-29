@@ -24,6 +24,7 @@ public:
 private:
 	std::ifstream infile;
 	int interval;
+	unsigned long int lastEventTs;
 };
 
 #endif

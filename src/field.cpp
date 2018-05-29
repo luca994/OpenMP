@@ -3,8 +3,7 @@
 
 Field::Field(){}
 
-Field::Field(Position v1, Position v2, Position v3, Position v4): v1(v1),v2(v2),v3(v3),v4(v4)
-{
+Field::Field(Position v1, Position v2, Position v3, Position v4): v1(v1),v2(v2),v3(v3),v4(v4){
   this->v1=v1;
   this->v2=v2;
   this->v1=v1;
@@ -13,15 +12,13 @@ Field::Field(Position v1, Position v2, Position v3, Position v4): v1(v1),v2(v2),
   maxx=std::max(std::max(v1.getX(),v2.getX()),std::max(v3.getX(),v4.getX()));
   miny=std::min(std::min(v1.getY(),v2.getY()),std::min(v3.getY(),v4.getY()));
   maxy=std::max(std::max(v1.getY(),v2.getY()),std::max(v3.getY(),v4.getY()));
-  if(!checkRectangle())
-  {
+  if(!checkRectangle()){
       throw std::invalid_argument("Error in Field initialization.");
   }
 }
 
 
-bool Field::checkRectangle()
-{
+bool Field::checkRectangle(){
 /* There must not exist two vertex with the same position*/
   if(v1.getX()==v2.getX() && v1.getY()==v2.getY())
     return false;
@@ -83,25 +80,23 @@ bool Field::checkRectangle()
   return true;
 }
 
-double Field::getMaxX()
-{
+double Field::getMaxX(){
   return maxx;
 }
-double Field::getMinX()
-{
+
+double Field::getMinX(){
   return minx;
 }
-double Field::getMaxY()
-{
+
+double Field::getMaxY(){
   return maxy;
 }
-double Field::getMinY()
-{
+
+double Field::getMinY(){
   return miny;
 }
 
-bool Field::isOnField(Position p)
-{
+bool Field::isOnField(Position p){
   if(p.getX()<=maxx && p.getX()>=minx && p.getY()<=maxy && p.getY()>=miny)
     return true;
   else

@@ -2,34 +2,28 @@
 
 Player::Player(){}
 
-Player::Player(std::string name,std::string team,bool playing)
-{
+Player::Player(std::string name,std::string team,bool playing){
   fullName=name;
   this->team=team;
   this->playing=playing;
 }
 
-std::string Player::getType() const
-{
+std::string Player::getType() const{
   return "Player";
 }
 
-std::string Player::getName()
-{
+std::string Player::getName(){
   return fullName;
 }
 
-std::string Player::getTeam()
-{
+std::string Player::getTeam(){
   return team;
 }
 
-bool Player::isPlaying()
-{
+bool Player::isPlaying(){
   return playing;
 }
 
-void Player::setPlaying(bool Playing)
-{
+void Player::setPlaying(bool Playing){
   this->playing=Playing;
 }

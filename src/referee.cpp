@@ -1,6 +1,5 @@
 #include "referee.h"
 
-std::string Referee::getType() const
-{
+std::string Referee::getType() const{
   return "Referee";
 }

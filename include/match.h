@@ -16,8 +16,8 @@ public:
   Match(Field f);
   void addSensor(Sensor s);
   std::map<int,Sensor> getSensors();
-//  void restartMatch();
   unsigned long int getCurrentTime();
+  unsigned long int getEndTime();
   int simulateMatch(std::vector<Event> & events, std::vector<TimeInterval> & intervals);
   unsigned long int getPlayerBallPossession(std::string playerName);
   unsigned long int getTeamBallPossession(std::string team);
@@ -33,7 +33,6 @@ private:
   std::map<int,Sensor> sensors;
   std::map<std::shared_ptr<Player>,unsigned long int> playerBallPossession;
   std::map<std::string,unsigned long int> teamBallPossession;
-
   std::shared_ptr<Player> findPlayerCloserToTheBall(std::map<int,Sensor> & tempSens, Position pos);
   void findAllMostRecentPositions(std::map<int,Sensor> & tempSens,std::vector<Event> & events,int i);
   bool isInPlay(std::vector<TimeInterval> & intervals,unsigned long int ts);
