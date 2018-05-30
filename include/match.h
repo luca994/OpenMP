@@ -18,7 +18,7 @@ public:
   std::map<int,Sensor> getSensors();
   unsigned long int getCurrentTime();
   unsigned long int getEndTime();
-  int simulateMatch(std::vector<Event> & events, std::vector<TimeInterval> & intervals);
+  void simulateMatch(std::vector<Event> & events, std::vector<TimeInterval> & intervals);
   unsigned long int getPlayerBallPossession(std::string playerName);
   unsigned long int getTeamBallPossession(std::string team);
   std::vector<std::string> getPlayersName();

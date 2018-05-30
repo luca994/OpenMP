@@ -1,8 +1,19 @@
 #include "field.h"
 #include <stdexcept>
 
+/**
+*
+*Deafult constructor
+*
+*/
 Field::Field(){}
 
+/**
+*
+*Constructor of Field class, assigns the vertex of the field taking their positions as input.
+*Checks if the field is correct
+*
+*/
 Field::Field(Position v1, Position v2, Position v3, Position v4): v1(v1),v2(v2),v3(v3),v4(v4){
   this->v1=v1;
   this->v2=v2;
@@ -17,7 +28,12 @@ Field::Field(Position v1, Position v2, Position v3, Position v4): v1(v1),v2(v2),
   }
 }
 
-
+/**
+*
+*Check if the field is in the correct position (the position of the vertex must be correct,
+*the field is considered a rectangle in horizontal position)
+*
+*/
 bool Field::checkRectangle(){
 /* There must not exist two vertex with the same position*/
   if(v1.getX()==v2.getX() && v1.getY()==v2.getY())
@@ -96,6 +112,11 @@ double Field::getMinY(){
   return miny;
 }
 
+/**
+*
+*Returns true if the position p is inside the field, false otherwise
+*
+*/
 bool Field::isOnField(Position p){
   if(p.getX()<=maxx && p.getX()>=minx && p.getY()<=maxy && p.getY()>=miny)
     return true;
