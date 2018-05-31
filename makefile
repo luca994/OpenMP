@@ -19,9 +19,3 @@ $(SRCDIR)/%.o: %.c
 clean:
 	rm -f $(NAME)
 	rm -f $(SRCDIR)/*.o
-
-install: $(NAME)
-	cp $(NAME) $(BINDIR)
-
-uninstall:
-	rm -f $(BINDIR)/$(NAME)
