@@ -144,7 +144,7 @@ void Match::simulateMatch(std::vector<Event> & events, std::vector<TimeInterval>
 						updatedPositions=true;
 					}
 					playerCloserToTheBall=findPlayerCloserToTheBall(tempSens,events[i].getPosition());
-					if(!playerCloserToTheBall==NULL){
+					if(playerCloserToTheBall!=NULL){
 						tempPossession[playerCloserToTheBall]+=tempSens[events[i].getSid()].getPeriod();
 						playerCloserToTheBall=NULL;
 					}
@@ -244,6 +244,16 @@ unsigned long int Match::getCurrentTime(){
 */
 unsigned long int Match::getEndTime(){
 	return endTime;
+}
+
+/**
+*
+*Returns the start time of the game (useful only when you have all the events
+*of the game, so the match is already finished)
+*
+*/
+unsigned long int Match::getStartTime(){
+	return startTime;
 }
 
 /**
